@@ -1,10 +1,10 @@
 import easyaccept.EasyAccept;
 
 /**
- * Classe principal para execuÁ„o dos testes do sistema Jackut.
+ * Classe principal para execu√ß√£o dos testes do sistema Jackut.
  * Utiliza o framework EasyAccept para validar as funcionalidades implementadas
- * por meio de arquivos de teste contendo cen·rios de uso.
- * O mÈtodo main carrega a classe Facade e executa os testes definidos nos arquivos
+ * por meio de arquivos de teste contendo cen√°rios de uso.
+ * O metodo main carrega a classe Facade e executa os testes definidos nos arquivos
  * de texto fornecidos no array de argumentos.
  *
  * @author Felipe Lira
@@ -12,10 +12,10 @@ import easyaccept.EasyAccept;
 public class Main {
 
     /**
-     * Ponto de entrada do programa para execuÁ„o dos testes.
-     * Configura o EasyAccept para rodar os testes de aceitaÁ„o listados nos arquivos de teste.
+     * Ponto de entrada do programa para execu√ß√£o dos testes.
+     * Configura o EasyAccept para rodar os testes de aceita√ß√£o listados nos arquivos de teste.
      *
-     * @param args Argumentos da linha de comando (n„o utilizados neste programa).
+     * @param args Argumentos da linha de comando (n√£o utilizados neste programa).
      */
     public static void main(String[] args) {
         // Define os arquivos de teste e a classe principal Facade

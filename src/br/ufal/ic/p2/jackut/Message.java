@@ -3,7 +3,7 @@ package br.ufal.ic.p2.jackut;
 import java.io.Serializable;
 
 /**
- * Classe que representa um Mensagem enviado de um usuário para outro no sistema Jackut.
+ * Classe que representa uma Mensagem enviado de um usuário para outro no sistema Jackut.
  * Implementa a interface Serializable, permitindo a persistência de objetos em arquivos.
  * Cada Mensagem contém informações sobre o remetente, destinatário e o conteúdo da mensagem.
  *
@@ -18,21 +18,21 @@ public class Message implements Serializable {
     private String destinatario;
 
     /**
-     * Login do remetente do Mensagem.
+     * Login do remetente da Mensagem.
      */
     private String remetente;
 
     /**
-     * Conteúdo da mensagem do Mensagem.
+     * Conteúdo da mensagem da Mensagem.
      */
     private String mensagem;
 
     /**
-     * Construtor que inicializa um Mensagem com remetente, mensagem e destinatário.
+     * Construtor que inicializa uma Mensagem com remetente, conteúdo da mensagem e destinatário.
      *
-     * @param remetente O login do usuário que enviou o Mensagem.
-     * @param mensagem O conteúdo do Mensagem.
-     * @param destinatario O login do usuário que recebeu o Mensagem.
+     * @param remetente O login do usuário que enviou a Mensagem.
+     * @param mensagem O conteúdo da Mensagem.
+     * @param destinatario O login do usuário que recebeu a Mensagem.
      */
     public Message(String remetente, String mensagem, String destinatario) {
         this.remetente = remetente;
@@ -41,7 +41,7 @@ public class Message implements Serializable {
     }
 
     /**
-     * Obtém o login do remetente do Mensagem.
+     * Obtém o login do remetente da Mensagem.
      *
      * @return O login do remetente.
      */
@@ -50,7 +50,7 @@ public class Message implements Serializable {
     }
 
     /**
-     * Obtém o login do destinatário do Mensagem.
+     * Obtém o login do destinatário da Mensagem.
      *
      * @return O login do destinatário.
      */
@@ -59,9 +59,9 @@ public class Message implements Serializable {
     }
 
     /**
-     * Obtém o conteúdo da mensagem do Mensagem.
+     * Obtém o conteúdo da mensagem do Recado.
      *
-     * @return A mensagem do Mensagem.
+     * @return A texto da Mensagem.
      */
     public String getMensagem() {
         return mensagem;
