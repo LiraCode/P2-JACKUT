@@ -26,6 +26,14 @@ Jackut é uma aplicação de rede social simples, projetada para gerenciar usuá
     - Integração com o framework EasyAccept para execução de testes de aceitação.
 
 ---
+## Etapas
+
+
+
+
+***02-04-2025 -*** **Milestone 1 |  (Users Stories 1 a 4).**
+
+---
 
 ## Estrutura do Projeto
 
