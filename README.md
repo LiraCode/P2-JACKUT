@@ -45,3 +45,5 @@ br/ufal/ic/p2/jackut/
 ├── Main.java             # Classe principal para execução dos testes
 ├── tests/                # Pasta com arquivos de teste para o EasyAccept
 └── usuarios.ser          # Arquivo serializado contendo os dados persistidos (gerado em runtime)
+```
+Obs: Testado com openJDK 24 no IntelliJ IDEA 2024.3.2.1 -  Info 05/04/25 

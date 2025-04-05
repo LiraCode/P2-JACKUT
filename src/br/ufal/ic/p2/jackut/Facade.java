@@ -7,7 +7,6 @@ import java.util.*;
  * Classe que gerencia as funcionalidades principais do sistema Jackut.
  * Oferece métodos para criar usuários, gerenciar sessões, enviar recados,
  * adicionar amigos e manipular dados do sistema.
- *
  * Implementa a persistência dos dados usando serialização de objetos.
  *
  * @author Felipe Lira
