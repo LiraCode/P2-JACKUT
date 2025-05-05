@@ -1,6 +1,7 @@
 package br.ufal.ic.p2.jackut.services;
 
 import br.ufal.ic.p2.jackut.exceptions.InvalidCommunityException;
+import br.ufal.ic.p2.jackut.exceptions.NotFoundMessageException;
 import br.ufal.ic.p2.jackut.exceptions.NotFoundUserException;
 import br.ufal.ic.p2.jackut.models.Community;
 import br.ufal.ic.p2.jackut.models.User;
@@ -183,6 +184,39 @@ public class CommunityService {
         communityRepository.removeCommunity(nome);
         communityRepository.saveData(); // Persiste após remoção
     }
+    // Add these methods to the CommunityService class
+
+    public void sendMessage(String sessionId, String communityName, String content)
+            throws NotFoundUserException, InvalidCommunityException {
+        User user = userRepository.getUserBySession(sessionId);
+        if (user == null) {
+            throw new NotFoundUserException();
+        }
+
+        Community community = communityRepository.getCommunityByName(communityName);
+        if (community == null) {
+            throw new InvalidCommunityException("notFound");
+        }
+
+        community.addMessage(content);
+        for (String member : community.getMembers()) {
+            User memberUser = userRepository.getUserByLogin(member);
+            if (memberUser != null) {
+                memberUser.addCommunityMessage(content);
+            }
+        }
+    }
+
+    public String readMessage(String sessionId)
+            throws NotFoundUserException, NotFoundMessageException {
+        User user = userRepository.getUserBySession(sessionId);
+        if (user == null) {
+            throw new NotFoundUserException();
+        }
+
+        return user.readCommunitiesMessages();
+    }
+
 
     public List<String> searchCommunities(String termo) {
         String termLower = termo.toLowerCase();

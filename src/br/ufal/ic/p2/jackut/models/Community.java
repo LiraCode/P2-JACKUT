@@ -1,9 +1,9 @@
 package br.ufal.ic.p2.jackut.models;
 
+import br.ufal.ic.p2.jackut.repositories.UserRepository;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Community implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -12,6 +12,7 @@ public class Community implements Serializable {
     private String description;
     private String manager;
     private ArrayList<String> members;
+    private Queue<String> messages;
 
     public Community(String name, String description, String manager) {
         this.name = name;
@@ -19,6 +20,7 @@ public class Community implements Serializable {
         this.manager = manager;
         this.members = new ArrayList<>();
         this.members.add(manager); // O gerente é automaticamente um membro
+        this.messages = new LinkedList<>();
     }
 
     public String getName() {
@@ -70,6 +72,10 @@ public class Community implements Serializable {
 
     public boolean isManager(String login) {
         return manager.equals(login);
+    }
+
+    public void addMessage(String message) {
+        messages.add(message);
     }
 
     @Override

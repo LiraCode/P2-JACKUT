@@ -15,9 +15,9 @@ public class NotFoundMessageException extends Exception {
     /**
      * Construtor que permite definir uma mensagem de erro personalizada.
      *
-     * @param message a mensagem de erro
+     * @param type a mensagem de erro
      */
-    public NotFoundMessageException(String message) {
-        super(message);
+    public NotFoundMessageException(String type) {
+        super(type.equals("community") ? "Não há mensagens." : "Não há recados.");
     }
 }

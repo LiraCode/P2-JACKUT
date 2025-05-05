@@ -1,6 +1,9 @@
 package br.ufal.ic.p2.jackut.models;
 
 import br.ufal.ic.p2.jackut.exceptions.NotFilledAttributeException;
+import br.ufal.ic.p2.jackut.exceptions.NotFoundMessageException;
+import br.ufal.ic.p2.jackut.models.Community;
+import br.ufal.ic.p2.jackut.repositories.UserRepository;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -21,6 +24,12 @@ public class User implements Serializable {
     private Map<String, String> attributes;
     private Queue<Message> messages;
     private ArrayList<String> communitiesJoined;
+    private Queue<String> communitiesMessages;
+    public ArrayList<String> fans = new ArrayList<>();
+    public ArrayList<String> idols = new ArrayList<>();
+    private ArrayList<String> crushes = new ArrayList<>();
+    private ArrayList<String> enemies = new ArrayList<>();
+    /**
 
     /**
      * Construtor padrão necessário para serialização.
@@ -30,6 +39,7 @@ public class User implements Serializable {
         this.attributes = new HashMap<>();
         this.messages = new LinkedList<>();
         this.communitiesJoined = new ArrayList<>();
+        this.communitiesMessages = new LinkedList<>();
     }
 
     /**
@@ -175,4 +185,20 @@ public class User implements Serializable {
     public ArrayList<String> getCommunitiesJoined() {
         return communitiesJoined;
     }
+
+    public String readCommunitiesMessages() throws NotFoundMessageException {
+
+        if (communitiesMessages.isEmpty() || communitiesMessages.peek() == null) {
+             throw new NotFoundMessageException("community");
+
+        }
+        return communitiesMessages.poll();
+    }
+
+    public void addCommunityMessage(String message) {
+        communitiesMessages.add(message);
+    }
+
+
+
 }

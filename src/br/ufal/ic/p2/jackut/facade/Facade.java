@@ -262,6 +262,14 @@ public class Facade {
         return communityService.listCommunities(nome);
     }
 
+    public void enviarMensagem(String id, String comunidade, String mensagem)
+            throws NotFoundUserException, InvalidCommunityException {
+        communityService.sendMessage(id, comunidade, mensagem);
+    }
 
+    public String lerMensagem(String id)
+            throws NotFoundUserException, NotFoundMessageException {
+        return communityService.readMessage(id);
+    }
     }
 
