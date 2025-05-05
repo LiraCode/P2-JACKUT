@@ -1,5 +1,6 @@
 package br.ufal.ic.p2.jackut.models;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * @author Felipe Lira
  */
 public class Recado implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L; // Identificador único para a classe
 
     /**

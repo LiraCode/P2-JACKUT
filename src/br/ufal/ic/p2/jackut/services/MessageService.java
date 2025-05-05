@@ -30,7 +30,7 @@ public class MessageService {
      * @throws SelfMessageException se o usuário tentar enviar mensagem para si mesmo
      * @throws NotFoundUserException se o remetente ou destinatário não forem encontrados
      */
-    public void sendMessage(String sessionId, String destinatario, String mensagem) throws NotFoundUserException, SelfMessageException {
+    public void sendMessage(String sessionId, String destinatario, String mensagem) {
         User sender = userRepository.getUserBySession(sessionId);
         if (sender == null) {
             throw new NotFoundUserException();
@@ -61,7 +61,7 @@ public class MessageService {
      * @throws NotFoundUserException if the user doesn't exist
      * @throws NotFoundMessageException if there are no messages
      */
-    public String readMessage(String id) throws NotFoundUserException, NotFoundMessageException {
+    public String readMessage(String id) {
         User user = userRepository.getUserBySession(id);
         if (user == null) {
             throw new NotFoundUserException();

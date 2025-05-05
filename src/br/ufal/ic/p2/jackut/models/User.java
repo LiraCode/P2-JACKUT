@@ -184,7 +184,7 @@ public class User implements Serializable {
         return communitiesJoined;
     }
 
-    public String readCommunitiesMessages() throws NotFoundMessageException {
+    public String readCommunitiesMessages()  {
 
         if (communitiesMessages.isEmpty() || communitiesMessages.peek() == null) {
              throw new NotFoundMessageException("community");

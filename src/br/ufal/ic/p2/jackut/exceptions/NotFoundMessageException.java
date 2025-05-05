@@ -3,7 +3,7 @@ package br.ufal.ic.p2.jackut.exceptions;
 /**
  * Exceção lançada quando não há mensagens para ler.
  */
-public class NotFoundMessageException extends Exception {
+public class NotFoundMessageException extends RuntimeException {
 
     /**
      * Construtor padrão que define a mensagem de erro como "Não há recados."

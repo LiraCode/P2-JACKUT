@@ -6,8 +6,7 @@ import br.ufal.ic.p2.jackut.models.User;
 import br.ufal.ic.p2.jackut.repositories.UserRepository;
 
 /**
- * Serviço responsável pela autenticação de usuários.
- * Implementa o padrão Service para isolar a lógica de negócio.
+ * Serviço responsável pela autenticação e gerenciamento de sessões de usuários.
  */
 public class AuthService {
 
@@ -23,14 +22,12 @@ public class AuthService {
     }
 
     /**
-     * Logs in a user.
-     * This method authenticates a user by verifying their login and password,
-     * and creates a new session if successful.
+     * Realiza o login de um usuário e cria uma sessão.
      *
-     * @param login The login of the user
-     * @param senha The password of the user
-     * @return The session ID
-     * @throws InvalidAuthException if the login or password is invalid
+     * @param login O login do usuário
+     * @param senha A senha do usuário
+     * @return O ID da sessão
+     * @throws InvalidAuthException se o login ou senha for inválido
      */
     public String login(String login, String senha) throws InvalidAuthException {
         User user = userRepository.getUserByLogin(login);
@@ -59,6 +56,7 @@ public class AuthService {
      *
      * @param sessionId o ID da sessão a ser verificada
      * @return true se a sessão for válida, false caso contrário
+     * @throws NotFoundUserException se o usuário não for encontrado
      */
     public boolean isValidSession(String sessionId) throws NotFoundUserException {
         return sessionId != null && userRepository.getUserBySession(sessionId) != null;
@@ -68,23 +66,15 @@ public class AuthService {
      * Obtém o usuário associado a uma sessão.
      *
      * @param sessionId o ID da sessão
-     * @return o usuário associado à sessão ou null se a sessão for inválida
+     * @return o usuário associado à sessão
+     * @throws NotFoundUserException se o usuário não for encontrado
      */
     public User getUserFromSession(String sessionId) throws NotFoundUserException {
-        return userRepository.getUserBySession(sessionId);
+        User user = userRepository.getUserBySession(sessionId);
+        if (user == null) {
+            throw new NotFoundUserException("Sessão inválida ou expirada.");
+        }
+        return user;
     }
 
-    /**
-     * Encerra uma sessão de usuário.
-     *
-     * @param sessionId o ID da sessão a ser encerrada
-     * @return true se a sessão foi encerrada com sucesso, false caso contrário
-     */
-    public boolean logout(String sessionId) throws NotFoundUserException {
-        if (isValidSession(sessionId)) {
-            userRepository.removeSession(sessionId);
-            return true;
-        }
-        return false;
-    }
 }

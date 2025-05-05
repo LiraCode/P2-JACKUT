@@ -1,6 +1,10 @@
 package br.ufal.ic.p2.jackut.exceptions;
 
-public class NotFilledAttributeException extends Exception {
+/**
+ * Exceção lançada quando um atributo não está preenchido.
+ */
+
+public class NotFilledAttributeException extends RuntimeException {
 
     public NotFilledAttributeException() {
         super("Atributo não preenchido.");

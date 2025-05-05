@@ -3,7 +3,7 @@ package br.ufal.ic.p2.jackut.exceptions;
 /**
  * Exceção lançada quando um atributo de perfil não está preenchido.
  */
-public class AttributeNotFoundException extends Exception {
+public class AttributeNotFoundException extends RuntimeException {
 
     /**
      * Construtor padrão que define a mensagem de erro como "Atributo não preenchido."

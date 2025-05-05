@@ -5,8 +5,6 @@ package br.ufal.ic.p2.jackut.exceptions;
  */
 public class CrushAlreadyAdded extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
-
     public CrushAlreadyAdded() {
         super("Usuário já está adicionado como paquera.");
     }

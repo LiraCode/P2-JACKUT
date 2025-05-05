@@ -61,7 +61,7 @@ public class SystemService {
      * @return lista com os nomes das comunidades em que o usuário está
      * @throws NotFoundUserException se o usuário não for encontrado
      */
-    public String listUserCommunities(String sessionId) throws NotFoundUserException {
+    public String listUserCommunities(String sessionId) {
         return communityService.listCommunities(sessionId);
     }
 }

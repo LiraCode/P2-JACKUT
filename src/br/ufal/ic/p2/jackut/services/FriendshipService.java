@@ -50,7 +50,7 @@ public class FriendshipService {
      * @throws NotFoundUserException se algum dos usuários não for encontrado
      * @throws InvalidFriendOpException se a operação de amizade for inválida
      */
-    public void addFriend(String sessionId, String friendLogin) throws NotFoundUserException, InvalidFriendOpException {
+    public void addFriend(String sessionId, String friendLogin) {
         User user = userRepository.getUserBySession(sessionId);
         if (user == null) {
             throw new NotFoundUserException();
@@ -99,7 +99,7 @@ public class FriendshipService {
      * @return uma string representando a lista de amigos no formato: "{amigo1,amigo2,...}"
      * @throws NotFoundUserException se o usuário não for encontrado
      */
-    public String getFriendsList(String login) throws NotFoundUserException {
+    public String getFriendsList(String login) {
         User user = userRepository.getUserByLogin(login);
         if (user == null) {
             throw new NotFoundUserException();
@@ -115,7 +115,7 @@ public class FriendshipService {
      * @return uma lista com os logins dos usuários que enviaram solicitações
      * @throws NotFoundUserException se o usuário não for encontrado
      */
-    public List<String> getPendingFriendRequests(String login) throws NotFoundUserException {
+    public List<String> getPendingFriendRequests(String login){
         User user = userRepository.getUserByLogin(login);
         if (user == null) {
             throw new NotFoundUserException();
@@ -132,8 +132,7 @@ public class FriendshipService {
      * @throws NotFoundUserException se algum dos usuários não for encontrado
      * @throws InvalidFriendOpException se não houver solicitação pendente
      */
-    public void rejectFriendRequest(String id, String solicitante)
-            throws NotFoundUserException, InvalidFriendOpException {
+    public void rejectFriendRequest(String id, String solicitante) {
         User user = userRepository.getUserBySession(id);
         if (user == null) {
             throw new NotFoundUserException();

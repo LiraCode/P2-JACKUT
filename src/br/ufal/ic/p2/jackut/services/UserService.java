@@ -41,8 +41,7 @@ public class UserService {
      * @throws InvalidAuthException se o login ou senha forem inválidos
      * @throws UserAlreadyExistsException se já existir um usuário com o mesmo login
      */
-    public void createUser(String login, String senha, String nome)
-            throws InvalidAuthException, UserAlreadyExistsException {
+    public void createUser(String login, String senha, String nome) {
         if (login == null || login.isBlank() || login.length() < 3) {
             throw new InvalidAuthException("login");
         }
@@ -69,12 +68,11 @@ public class UserService {
      * @param login o login do usuário
      * @param atributo o atributo a ser obtido
      * @return o valor do atributo
-     * @throws NotFoundUserException se o usuário não for encontrado
+     * @exception  NotFoundUserException Se o usuário inimigo não for encontrado.
      * @throws InvalidAuthException se o atributo for inválido
      * @throws NotFilledAttributeException se o atributo não estiver preenchido
      */
-    public String getUserAttribute(String login, String atributo)
-            throws NotFoundUserException, InvalidAuthException, NotFilledAttributeException {
+    public String getUserAttribute(String login, String atributo){
         User user = userRepository.getUserByLogin(login);
         if (user == null) {
             throw new NotFoundUserException();
@@ -104,12 +102,11 @@ public class UserService {
      * @param sessionId o ID da sessão do usuário
      * @param atributo o atributo a ser editado
      * @param valor o novo valor do atributo
-     * @throws NotFoundUserException se o usuário não for encontrado
+     * @exception  NotFoundUserException Se o usuário inimigo não for encontrado.
      * @throws InvalidAuthException se o login for inválido
      * @throws UserAlreadyExistsException se o novo login já existir
      */
-    public void editUserProfile(String sessionId, String atributo, String valor)
-            throws NotFoundUserException, InvalidAuthException, UserAlreadyExistsException {
+    public void editUserProfile(String sessionId, String atributo, String valor) {
         User user = userRepository.getUserBySession(sessionId);
         if (user == null) {
             throw new NotFoundUserException();
@@ -142,12 +139,11 @@ public class UserService {
      * @param id o ID da sessão do usuário
      * @param atributo o atributo a ser editado
      * @param valor o novo valor do atributo
-     * @throws NotFoundUserException se o usuário não for encontrado
+     * @exception  NotFoundUserException Se o usuário inimigo não for encontrado.
      * @throws InvalidAuthException se o login for inválido
      * @throws UserAlreadyExistsException se o novo login já existir
      */
-    public void editProfile(String id, String atributo, String valor)
-            throws NotFoundUserException, InvalidAuthException, UserAlreadyExistsException {
+    public void editProfile(String id, String atributo, String valor){
         editUserProfile(id, atributo, valor);
     }
 
@@ -156,12 +152,12 @@ public class UserService {
      *
      * @param userLogin O login do usuário que está adicionando o ídolo.
      * @param idolLogin O login do usuário a ser adicionado como ídolo.
-     * @throws NotFoundUserException Se o usuário ídolo não for encontrado.
+     * @exception  NotFoundUserException Se o usuário inimigo não for encontrado.
      * @throws IdolAlreadyAdded Se o usuário já for ídolo.
      * @throws FanOfItself Se o usuário tentar se adicionar como seu próprio ídolo.
      * @throws EnemyException Se o ídolo tiver o usuário como inimigo.
      */
-    public void addIdol(String userLogin, String idolLogin) throws NotFoundUserException {
+    public void addIdol(String userLogin, String idolLogin) {
         User user = userRepository.getUserByLogin(userLogin);
         User idol = userRepository.getUserByLogin(idolLogin);
 
@@ -205,10 +201,10 @@ public class UserService {
      *
      * @param userLogin O login do usuário que está adicionando a paquera.
      * @param crushLogin O login do usuário a ser adicionado como paquera.
-     * @throws NotFoundUserException Se o usuário paquera não for encontrado.
+     * @exception  NotFoundUserException Se o usuário inimigo não for encontrado.
      * @throws EnemyException Se a paquera tiver o usuário como inimigo.
      */
-    public void addCrush(String userLogin, String crushLogin) throws NotFoundUserException {
+    public void addCrush(String userLogin, String crushLogin) {
         User user = userRepository.getUserByLogin(userLogin);
         User crush = userRepository.getUserByLogin(crushLogin);
 
@@ -241,9 +237,9 @@ public class UserService {
      *
      * @param userLogin O login do usuário que está adicionando o inimigo.
      * @param enemyLogin O login do usuário a ser adicionado como inimigo.
-     * @throws NotFoundUserException Se o usuário inimigo não for encontrado.
+     * @exception  NotFoundUserException Se o usuário inimigo não for encontrado.
      */
-    public void addEnemy(String userLogin, String enemyLogin) throws NotFoundUserException {
+    public void addEnemy(String userLogin, String enemyLogin) {
         User user = userRepository.getUserByLogin(userLogin);
         User enemy = userRepository.getUserByLogin(enemyLogin);
 
@@ -386,9 +382,9 @@ public class UserService {
      *
      * @param login The login of the user to be removed
      * @return true if the user was successfully removed, false otherwise
-     * @throws NotFoundUserException if the user doesn't exist
+     * @exception  NotFoundUserException Se o usuário inimigo não for encontrado.
      */
-    public boolean removeUser(String login) throws NotFoundUserException {
+    public boolean removeUser(String login)  {
         User user = userRepository.getUserByLogin(login);
         if (user == null) {
             throw new NotFoundUserException();

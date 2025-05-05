@@ -1,6 +1,10 @@
 package br.ufal.ic.p2.jackut.exceptions;
 
-public class InvalidAuthException extends Exception {
+/**
+ * Exceção lançada quando se tenta autenticar com credenciais inválidas.
+ */
+
+public class InvalidAuthException extends RuntimeException {
 
     public InvalidAuthException(String type) {
         super(getMessageForType(type));

@@ -51,124 +51,115 @@ public class Facade {
     }
 
     public void criarUsuario(String login, String senha, String nome)
-            throws InvalidAuthException, UserAlreadyExistsException {
+              {
 
         userService.createUser(login, senha, nome);
 
     }
 
-    public String getAtributoUsuario(String login, String atributo)
-            throws NotFoundUserException, NotFilledAttributeException, InvalidAuthException {
+    public String getAtributoUsuario(String login, String atributo) {
 
         return userService.getUserAttribute(login, atributo);
 
     }
 
-    public String abrirSessao(String login, String senha)
-            throws InvalidAuthException {
+    public String abrirSessao(String login, String senha) {
         return authService.login(login, senha);
 
     }
 
     public void editarPerfil(String id, String atributo, String valor)
-            throws NotFoundUserException, InvalidAuthException, UserAlreadyExistsException {
+           {
 
         userService.editProfile(id, atributo, valor);
 
     }
 
-    public boolean ehAmigo(String login, String amigo)
-            throws NotFoundUserException {
+    public boolean ehAmigo(String login, String amigo){
         return friendshipService.areFriends(login, amigo);
     }
 
-    public void adicionarAmigo(String id, String amigo)
-            throws NotFoundUserException, InvalidFriendOpException {
+    public void adicionarAmigo(String id, String amigo){
 
         friendshipService.addFriend(id, amigo);
 
     }
 
-    public String getAmigos(String login)
-            throws NotFoundUserException {
+    public String getAmigos(String login){
         return friendshipService.getFriendsList(login);
 
     }
 
-    public void enviarRecado(String id, String destinatario, String mensagem)
-            throws NotFoundUserException, SelfMessageException {
+    public void enviarRecado(String id, String destinatario, String mensagem){
 
         messageService.sendMessage(id, destinatario, mensagem);
 
 
     }
 
-    public String lerRecado(String id)
-            throws NotFoundUserException, NotFoundMessageException {
+    public String lerRecado(String id){
         return messageService.readMessage(id);
 
     }
 
-    public void criarComunidade(String session, String nome, String descricao) throws InvalidCommunityException, NotFoundUserException {
+    public void criarComunidade(String session, String nome, String descricao){
 
         communityService.createCommunity(session, nome, descricao);
 //        }
     }
 
-    public void editarComunidade(String session, String nome, String descricao) throws InvalidCommunityException, NotFoundUserException {
+    public void editarComunidade(String session, String nome, String descricao){
 
         communityService.editCommunityDescription(session, nome, descricao);
 
     }
 
-    public void deletarComunidade(String session, String nome) throws InvalidCommunityException, NotFoundUserException {
+    public void deletarComunidade(String session, String nome){
 
         communityService.deleteCommunity(session, nome);
 
     }
 
-    public void adicionarComunidade(String session, String nome) throws InvalidCommunityException, NotFoundUserException {
+    public void adicionarComunidade(String session, String nome){
         communityService.joinCommunity(session, nome);
 
     }
 
-    public void sairComunidade(String session, String nome) throws InvalidCommunityException, NotFoundUserException {
+    public void sairComunidade(String session, String nome){
 
         communityService.leaveCommunity(session, nome);
 
     }
 
-    public void listarComunidades(String session) throws  NotFoundUserException {
+    public void listarComunidades(String session){
 
         communityService.listCommunities(session);
 
     }
 
-    public String getDescricaoComunidade(String nome) throws InvalidCommunityException {
+    public String getDescricaoComunidade(String nome){
         return communityService.getCommunityDescription(nome);
     }
 
-    public String getDonoComunidade(String nome) throws InvalidCommunityException {
+    public String getDonoComunidade(String nome) {
         return communityService.getCommunityOwner(nome);
     }
 
-    public String getMembrosComunidade(String nome) throws InvalidCommunityException {
+    public String getMembrosComunidade(String nome) {
         return communityService.getCommunityMembers(nome);
     }
 
-    public String getComunidades(String nome) throws  NotFoundUserException {
+    public String getComunidades(String nome){
 
 
         return communityService.listCommunities(nome);
     }
 
-    public void enviarMensagem(String id, String comunidade, String mensagem)
-            throws NotFoundUserException, InvalidCommunityException {
+    public void enviarMensagem(String id, String comunidade, String mensagem) {
         communityService.sendMessage(id, comunidade, mensagem);
     }
 
-    public String lerMensagem(String id)
-            throws NotFoundUserException, NotFoundMessageException {
+    public String lerMensagem(String id){
         return communityService.readMessage(id);
     }
 
@@ -178,7 +169,7 @@ public class Facade {
      * @param id    O ID da sessão do usuário que está adicionando o ídolo.
      * @param idolo O login do usuário a ser adicionado como ídolo.
      */
-    public void adicionarIdolo(String id, String idolo) throws NotFoundUserException {
+    public void adicionarIdolo(String id, String idolo){
 
         relationshipService.adicionarIdolo(id, idolo);
     }
@@ -214,7 +205,7 @@ public class Facade {
      * @param id      O ID da sessão do usuário que está adicionando a paquera.
      * @param paquera O login do usuário a ser adicionado como paquera.
      */
-    public void adicionarPaquera(String id, String paquera) throws NotFoundUserException {
+    public void adicionarPaquera(String id, String paquera){
 
         relationshipService.adicionarPaquera(id, paquera);
 
@@ -227,7 +218,7 @@ public class Facade {
      * @param paquera O login da possível paquera.
      * @return true se o usuário for paquera, false caso contrário.
      */
-    public boolean ehPaquera(String id, String paquera) throws NotFoundUserException {
+    public boolean ehPaquera(String id, String paquera){
 
         return relationshipService.ehPaquera(id, paquera);
 
@@ -239,7 +230,7 @@ public class Facade {
      * @param id O ID da sessão do usuário.
      * @return Uma string formatada com a lista de paqueras.
      */
-    public String getPaqueras(String id) throws NotFoundUserException {
+    public String getPaqueras(String id){
 
         return relationshipService.getPaqueras(id);
 
@@ -251,7 +242,7 @@ public class Facade {
      * @param id      O ID da sessão do usuário que está adicionando o inimigo.
      * @param inimigo O login do usuário a ser adicionado como inimigo.
      */
-    public void adicionarInimigo(String id, String inimigo) throws NotFoundUserException {
+    public void adicionarInimigo(String id, String inimigo){
         relationshipService.adicionarInimigo(id, inimigo);
 
     }
@@ -263,7 +254,7 @@ public class Facade {
      * @param inimigo O login do possível inimigo.
      * @return true se o usuário for inimigo, false caso contrário.
      */
-    public boolean ehInimigo(String id, String inimigo) throws NotFoundUserException {
+    public boolean ehInimigo(String id, String inimigo){
         return relationshipService.ehInimigo(id, inimigo);
 
     }
@@ -274,7 +265,7 @@ public class Facade {
      * @param id O ID da sessão do usuário.
      * @return Uma string formatada com a lista de inimigos.
      */
-    public String getInimigos(String id) throws NotFoundUserException {
+    public String getInimigos(String id){
         return relationshipService.getInimigos(id);
 
     }
@@ -283,9 +274,8 @@ public class Facade {
      * Removes the currently logged-in user from the system.
      *
      * @param sessionId The session ID of the user to be removed
-     * @throws NotFoundUserException if the user doesn't exist
      */
-    public void removerUsuario(String sessionId) throws NotFoundUserException {
+    public void removerUsuario(String sessionId){
 
         User user = userRepository.getUserBySession(sessionId);
         String login = user.getLogin();

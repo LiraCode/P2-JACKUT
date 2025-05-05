@@ -5,8 +5,6 @@ package br.ufal.ic.p2.jackut.exceptions;
  */
 public class EnemyAlreadyAdded extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
-
     public EnemyAlreadyAdded() {
         super("Usuário já está adicionado como inimigo.");
     }

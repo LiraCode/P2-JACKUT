@@ -145,14 +145,14 @@ public class UserRepository {
     }
 
     /** Recupera usuário a partir de um sessionId. */
-    public User getUserBySession(String sessionId) throws NotFoundUserException {
+    public User getUserBySession(String sessionId)  {
         if (sessions.containsKey(sessionId)) {
             return sessions.get(sessionId);
         }
         throw new NotFoundUserException();
     }
 
-    public void JoinCommunity(String session, String name) throws NotFoundUserException {
+    public void JoinCommunity(String session, String name)  {
         User user = getUserBySession(session);
         if (user == null) {
             throw new NotFoundUserException();
@@ -161,7 +161,7 @@ public class UserRepository {
 
     }
 
-    public void LeaveCommunity(String session, String name) throws NotFoundUserException {
+    public void LeaveCommunity(String session, String name) {
         User user = getUserBySession(session);
         if (user == null) {
             throw new NotFoundUserException();
@@ -169,7 +169,7 @@ public class UserRepository {
         user.removeCommunity(name);
     }
 
-    public ArrayList<String> getCommunities(String login) throws NotFoundUserException {
+    public ArrayList<String> getCommunities(String login)  {
         User user = getUserByLogin(login);
         if (user == null) {
             throw new NotFoundUserException();

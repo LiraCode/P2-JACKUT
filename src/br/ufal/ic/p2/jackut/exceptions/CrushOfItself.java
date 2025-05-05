@@ -5,8 +5,6 @@ package br.ufal.ic.p2.jackut.exceptions;
  */
 public class CrushOfItself extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
-
     public CrushOfItself() {
         super("Usuário não pode ser paquera de si mesmo.");
     }

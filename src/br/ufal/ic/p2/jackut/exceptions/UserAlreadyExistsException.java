@@ -1,16 +1,15 @@
 package br.ufal.ic.p2.jackut.exceptions;
 
-public class UserAlreadyExistsException extends Exception {
+/**
+ * Exceção lançada quando se tenta criar um usuário com um login que já existe.
+ */
 
+public class UserAlreadyExistsException extends RuntimeException {
+    /**
+     * Construtor padrão que define a mensagem de erro como "Conta com esse nome já existe."
+     */
     public UserAlreadyExistsException() {
         super("Conta com esse nome já existe.");
     }
 
-    public UserAlreadyExistsException(String login) {
-        super("Já existe um usuário com o login: " + login);
-    }
-
-    public UserAlreadyExistsException(Throwable cause) {
-        super("Já existe um usuário com este login.", cause);
-    }
 }

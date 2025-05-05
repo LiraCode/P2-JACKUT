@@ -3,7 +3,7 @@ package br.ufal.ic.p2.jackut.exceptions;
 /**
  * Exceção lançada quando ocorre um erro relacionado a operações com comunidades.
  */
-public class InvalidCommunityException extends Exception {
+public class InvalidCommunityException extends RuntimeException {
 
     /**
      * Construtor que define a mensagem de erro com base no tipo de erro.

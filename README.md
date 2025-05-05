@@ -42,7 +42,7 @@ br/ufal/ic/p2/jackut/
 ├── Facade.java           # Classe principal para operações do sistema
 ├── User.java             # Classe que representa os usuários
 ├── Recado.java           # Classe que encapsula recados enviados entre usuários
-├── Main.java             # Classe principal para execução dos testes
+├── br.ufal.ic.p2.jackut.Main.java             # Classe principal para execução dos testes
 ├── tests/                # Pasta com arquivos de teste para o EasyAccept
 └── usuarios.ser          # Arquivo serializado contendo os dados persistidos (gerado em runtime)
 ```
