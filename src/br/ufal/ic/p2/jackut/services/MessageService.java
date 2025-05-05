@@ -1,9 +1,7 @@
 package br.ufal.ic.p2.jackut.services;
 
-import br.ufal.ic.p2.jackut.exceptions.NotFoundMessageException;
-import br.ufal.ic.p2.jackut.exceptions.NotFoundUserException;
-import br.ufal.ic.p2.jackut.exceptions.SelfMessageException;
-import br.ufal.ic.p2.jackut.models.Message;
+import br.ufal.ic.p2.jackut.exceptions.*;
+import br.ufal.ic.p2.jackut.models.Recado;
 import br.ufal.ic.p2.jackut.models.User;
 import br.ufal.ic.p2.jackut.repositories.UserRepository;
 
@@ -26,14 +24,14 @@ public class MessageService {
     /**
      * Envia uma mensagem de um usuário para outro.
      *
-     * @param id o ID da sessão do remetente
+     * @param sessionId o ID da sessão do remetente
      * @param destinatario o login do destinatário
      * @param mensagem o conteúdo da mensagem
      * @throws SelfMessageException se o usuário tentar enviar mensagem para si mesmo
      * @throws NotFoundUserException se o remetente ou destinatário não forem encontrados
      */
-    public void sendMessage(String id, String destinatario, String mensagem) throws SelfMessageException, NotFoundUserException {
-        User sender = userRepository.getUserBySession(id);
+    public void sendMessage(String sessionId, String destinatario, String mensagem) throws NotFoundUserException, SelfMessageException {
+        User sender = userRepository.getUserBySession(sessionId);
         if (sender == null) {
             throw new NotFoundUserException();
         }
@@ -43,32 +41,35 @@ public class MessageService {
             throw new NotFoundUserException();
         }
 
-        // Verifica se o usuário está tentando enviar mensagem para si mesmo
         if (sender.getLogin().equals(destinatario)) {
             throw new SelfMessageException();
         }
 
-        Message recado = new Message(sender.getLogin(), mensagem, destinatario);
+        if (recipient.getEnemies().contains(sender.getLogin())) {
+            throw new InvalidFriendOpException("Função inválida: " + recipient.getName() + " é seu inimigo.");
+        }
+
+        Recado recado = new Recado(sender.getLogin(), mensagem, destinatario);
         recipient.incomingMessage(recado);
     }
 
     /**
-     * Lê a próxima mensagem da fila de mensagens do usuário.
+     * Reads a message from the user's queue.
      *
-     * @param id o ID da sessão do usuário
-     * @return o conteúdo da mensagem lida
-     * @throws NotFoundMessageException se não houver mensagens para ler
-     * @throws NotFoundUserException se o usuário não for encontrado
+     * @param id The session ID of the user
+     * @return The content of the message
+     * @throws NotFoundUserException if the user doesn't exist
+     * @throws NotFoundMessageException if there are no messages
      */
-    public String readMessage(String id) throws NotFoundMessageException, NotFoundUserException {
+    public String readMessage(String id) throws NotFoundUserException, NotFoundMessageException {
         User user = userRepository.getUserBySession(id);
         if (user == null) {
             throw new NotFoundUserException();
         }
 
-        Message recado = user.getMessages().poll();
+        Recado recado = user.getMessages().poll();
         if (recado == null) {
-            throw new NotFoundMessageException();
+            throw new NotFoundMessageException("Não há recados.");
         }
 
         return recado.getMensagem();

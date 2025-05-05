@@ -76,4 +76,26 @@ public class Friends implements Serializable {
     public String getFormattedFriendsList() {
         return "{" + String.join(",", this.friendsList) + "}";
     }
+
+    /**
+     * Removes a friend from the friends list.
+     * This method removes the specified user from this user's friends list.
+     *
+     * @param friendLogin the login of the friend to remove
+     * @return true if the friend was removed, false if they weren't in the list
+     */
+    public boolean removeFriend(String friendLogin) {
+        return this.friendsList.remove(friendLogin);
+    }
+
+    /**
+     * Removes a friend solicitation.
+     * This method removes a pending friend request from this user's solicitations list.
+     *
+     * @param friendLogin the login of the friend solicitation to remove
+     * @return true if the solicitation was removed, false if it wasn't in the list
+     */
+    public boolean removeFriendSolicitation(String friendLogin) {
+        return this.friendSolicitations.remove(friendLogin);
+    }
 }

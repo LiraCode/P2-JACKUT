@@ -1,5 +1,6 @@
 package br.ufal.ic.p2.jackut.services;
 
+import br.ufal.ic.p2.jackut.exceptions.EnemyException;
 import br.ufal.ic.p2.jackut.exceptions.InvalidFriendOpException;
 import br.ufal.ic.p2.jackut.exceptions.NotFoundUserException;
 import br.ufal.ic.p2.jackut.models.User;
@@ -44,47 +45,50 @@ public class FriendshipService {
     /**
      * Adiciona um amigo ao usuário ou envia uma solicitação de amizade.
      *
-     * @param id o ID da sessão do usuário
-     * @param amigo o login do usuário a ser adicionado como amigo
+     * @param sessionId o ID da sessão do usuário
+     * @param friendLogin o login do usuário a ser adicionado como amigo
      * @throws NotFoundUserException se algum dos usuários não for encontrado
      * @throws InvalidFriendOpException se a operação de amizade for inválida
      */
-    public void addFriend(String id, String amigo) throws NotFoundUserException, InvalidFriendOpException {
-        User user = userRepository.getUserBySession(id);
+    public void addFriend(String sessionId, String friendLogin) throws NotFoundUserException, InvalidFriendOpException {
+        User user = userRepository.getUserBySession(sessionId);
         if (user == null) {
             throw new NotFoundUserException();
         }
 
-        User friendUser = userRepository.getUserByLogin(amigo);
-        if (friendUser == null) {
+        User friend = userRepository.getUserByLogin(friendLogin);
+        if (friend == null) {
             throw new NotFoundUserException();
         }
 
-        // Não pode adicionar a si mesmo como amigo
-        if (user.getLogin().equals(amigo)) {
-            throw new InvalidFriendOpException("self");
+        if (user.getLogin().equals(friendLogin)) {
+            throw new InvalidFriendOpException("Usuário não pode adicionar a si mesmo como amigo.");
+        }
+
+        if (friend.getEnemies().contains(user.getLogin())) {
+            throw new InvalidFriendOpException("Função inválida: " + friend.getName() + " é seu inimigo.");
         }
 
         // Já são amigos
-        if (user.getFriends().contains(amigo)) {
-            throw new InvalidFriendOpException("already");
+        if (user.getFriends().contains(friendLogin)) {
+            throw new InvalidFriendOpException("Usuário já está adicionado como amigo.");
         }
 
         // Verifica se já existe uma solicitação pendente
-        List<String> friendSolicitations = friendUser.getFriends().getFriendSolicitations();
+        List<String> friendSolicitations = friend.getFriends().getFriendSolicitations();
         if (friendSolicitations.contains(user.getLogin())) {
-            throw new InvalidFriendOpException("pending");
+            throw new InvalidFriendOpException("Usuário já está adicionado como amigo, esperando aceitação do convite.");
         }
 
         // Verifica se o amigo já enviou uma solicitação
         List<String> userSolicitations = user.getFriends().getFriendSolicitations();
-        if (userSolicitations.contains(friendUser.getLogin())) {
+        if (userSolicitations.contains(friend.getLogin())) {
             // Se o amigo já enviou uma solicitação, aceita automaticamente
-            user.getFriends().addFriend(friendUser.getLogin());
-            friendUser.getFriends().addFriend(user.getLogin());
+            user.getFriends().addFriend(friend.getLogin());
+            friend.getFriends().addFriend(user.getLogin());
         } else {
             // Caso contrário, envia uma solicitação
-            friendUser.getFriends().addFriendSolicitation(user.getLogin());
+            friend.getFriends().addFriendSolicitation(user.getLogin());
         }
     }
 

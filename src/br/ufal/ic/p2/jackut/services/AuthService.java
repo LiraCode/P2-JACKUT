@@ -1,6 +1,7 @@
 package br.ufal.ic.p2.jackut.services;
 
 import br.ufal.ic.p2.jackut.exceptions.InvalidAuthException;
+import br.ufal.ic.p2.jackut.exceptions.NotFoundUserException;
 import br.ufal.ic.p2.jackut.models.User;
 import br.ufal.ic.p2.jackut.repositories.UserRepository;
 
@@ -22,31 +23,25 @@ public class AuthService {
     }
 
     /**
-     * Autentica um usuário e cria uma nova sessão.
+     * Logs in a user.
+     * This method authenticates a user by verifying their login and password,
+     * and creates a new session if successful.
      *
-     * @param login o login do usuário
-     * @param senha a senha do usuário
-     * @return o ID da sessão criada
-     * @throws InvalidAuthException se o login ou senha forem inválidos
+     * @param login The login of the user
+     * @param senha The password of the user
+     * @return The session ID
+     * @throws InvalidAuthException if the login or password is invalid
      */
     public String login(String login, String senha) throws InvalidAuthException {
-        try {
-            User user = userRepository.getUserByLogin(login);
+        User user = userRepository.getUserByLogin(login);
 
-            if (user == null || !user.checkPassword(senha)) {
-                throw new InvalidAuthException("Login ou senha inválidos.");
-            }
-
-            String sessionId = generateSessionId(login);
-            userRepository.addSession(sessionId, user);
-            return sessionId;
-        } catch (InvalidAuthException e) {
-            // Repassamos a exceção original
-            throw e;
-        } catch (Exception e) {
-            // Capturamos outras exceções e as convertemos para InvalidAuthException
-            throw new InvalidAuthException("Erro ao realizar login: " + e.getMessage());
+        if (user == null || !user.getPassword().equals(senha)) {
+            throw new InvalidAuthException("Login ou senha inválidos.");
         }
+
+        String sessionId = generateSessionId(login);
+        userRepository.addSession(sessionId, user);
+        return sessionId;
     }
 
     /**
@@ -65,7 +60,7 @@ public class AuthService {
      * @param sessionId o ID da sessão a ser verificada
      * @return true se a sessão for válida, false caso contrário
      */
-    public boolean isValidSession(String sessionId) {
+    public boolean isValidSession(String sessionId) throws NotFoundUserException {
         return sessionId != null && userRepository.getUserBySession(sessionId) != null;
     }
 
@@ -75,7 +70,7 @@ public class AuthService {
      * @param sessionId o ID da sessão
      * @return o usuário associado à sessão ou null se a sessão for inválida
      */
-    public User getUserFromSession(String sessionId) {
+    public User getUserFromSession(String sessionId) throws NotFoundUserException {
         return userRepository.getUserBySession(sessionId);
     }
 
@@ -85,7 +80,7 @@ public class AuthService {
      * @param sessionId o ID da sessão a ser encerrada
      * @return true se a sessão foi encerrada com sucesso, false caso contrário
      */
-    public boolean logout(String sessionId) {
+    public boolean logout(String sessionId) throws NotFoundUserException {
         if (isValidSession(sessionId)) {
             userRepository.removeSession(sessionId);
             return true;

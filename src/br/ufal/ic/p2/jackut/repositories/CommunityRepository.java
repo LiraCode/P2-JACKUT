@@ -21,9 +21,17 @@ public class CommunityRepository {
         communities.put(community.getName(), community);
     }
 
-    /** Remove comunidade pelo nome. */
-    public void removeCommunity(String name) {
-        communities.remove(name);
+    /**
+     * Removes a community from the repository.
+     * This method completely removes a community from the system, including:
+     * 1. Removing it from the communities map
+     * 2. Any references to the community in user profiles will need to be handled separately
+     *
+     * @param name The name of the community to remove
+     * @return true if the community was removed, false if it didn't exist
+     */
+    public boolean removeCommunity(String name) {
+        return communities.remove(name) != null;
     }
 
     /** Verifica se comunidade existe. */

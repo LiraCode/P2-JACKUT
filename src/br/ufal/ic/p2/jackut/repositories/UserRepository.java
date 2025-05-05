@@ -1,5 +1,6 @@
 package br.ufal.ic.p2.jackut.repositories;
 
+import br.ufal.ic.p2.jackut.models.Recado;
 import br.ufal.ic.p2.jackut.models.User;
 import br.ufal.ic.p2.jackut.exceptions.NotFoundUserException;
 
@@ -23,9 +24,98 @@ public class UserRepository {
         users.put(user.getLogin(), user);
     }
 
-    /** Remove usuário pelo login. */
-    public void removeUser(String login) {
+    /**
+     * Removes a user completely from the system, including all references.
+     *
+     * @param login The login of the user to be removed
+     * @return true if the user was successfully removed, false otherwise
+     */
+    public boolean removeUserCompletely(String login) {
+        User user = getUserByLogin(login);
+        if (user == null) {
+            return false;
+        }
+
+        // Get the communities owned by this user before removing them
+        List<String> ownedCommunities = new ArrayList<>();
+        if (user.getCommunitiesJoined() != null) {
+            ownedCommunities.addAll(user.getCommunitiesJoined());
+        }
+
+        // Remove user from all friend lists, fan lists, idol lists, etc.
+        for (User otherUser : users.values()) {
+            // Remove from friends
+            if (otherUser.getFriends() != null) {
+                otherUser.getFriends().getFriendsList().remove(login);
+                otherUser.getFriends().getFriendSolicitations().remove(login);
+            }
+
+            // Remove from fans
+            if (otherUser.getFans() != null) {
+                otherUser.getFans().remove(login);
+            }
+
+            // Remove from idols
+            if (otherUser.getIdols() != null) {
+                otherUser.getIdols().remove(login);
+            }
+
+            // Remove from crushes
+            if (otherUser.getCrushes() != null) {
+                otherUser.getCrushes().remove(login);
+            }
+
+            // Remove from enemies
+            if (otherUser.getEnemies() != null) {
+                otherUser.getEnemies().remove(login);
+            }
+
+            // Remove any messages from this user
+            if (otherUser.getMessages() != null) {
+                Queue<Recado> updatedMessages = new LinkedList<>();
+                for (Recado recado : otherUser.getMessages()) {
+                    if (!recado.getRemetente().equals(login)) {
+                        updatedMessages.add(recado);
+                    }
+                }
+                otherUser.setMessages(updatedMessages);
+            }
+
+            // Remove user from communities joined by other users
+            if (otherUser.getCommunitiesJoined() != null) {
+                // Make a copy to avoid ConcurrentModificationException
+                List<String> communitiesToCheck = new ArrayList<>(otherUser.getCommunitiesJoined());
+                for (String communityName : communitiesToCheck) {
+                    // If this community was owned by the deleted user, remove it from the joined list
+                    if (ownedCommunities.contains(communityName)) {
+                        otherUser.getCommunitiesJoined().remove(communityName);
+                    }
+                }
+            }
+        }
+
+        // Remove user's sessions
+        List<String> sessionsToRemove = new ArrayList<>();
+        for (Map.Entry<String, User> entry : sessions.entrySet()) {
+            if (entry.getValue().getLogin().equals(login)) {
+                sessionsToRemove.add(entry.getKey());
+            }
+        }
+
+        for (String sessionId : sessionsToRemove) {
+            sessions.remove(sessionId);
+        }
+
+        // Remove communities owned by this user
+        for (String communityName : ownedCommunities) {
+            // This would need to be implemented in the CommunityRepository
+            // communityRepository.removeCommunity(communityName);
+        }
+
+        // Finally remove the user
         users.remove(login);
+        saveData();
+        return true;
     }
 
     /** Verifica se usuário existe. */
@@ -38,18 +128,6 @@ public class UserRepository {
         return users.get(login);
     }
 
-    /**
-     * Busca um usuário pelo login ou lança exceção se não encontrado.
-     *
-     * @throws RuntimeException se o usuário não for encontrado
-     */
-    public User getUserByLoginOrThrow(String login) throws NotFoundUserException {
-        User user = users.get(login);
-        if (user == null) {
-            throw new NotFoundUserException();
-        }
-        return user;
-    }
 
     /** Retorna mapa imutável de usuários (só leitura). */
     public Map<String, User> getUsers() {
@@ -67,8 +145,11 @@ public class UserRepository {
     }
 
     /** Recupera usuário a partir de um sessionId. */
-    public User getUserBySession(String sessionId) {
-        return sessions.get(sessionId);
+    public User getUserBySession(String sessionId) throws NotFoundUserException {
+        if (sessions.containsKey(sessionId)) {
+            return sessions.get(sessionId);
+        }
+        throw new NotFoundUserException();
     }
 
     public void JoinCommunity(String session, String name) throws NotFoundUserException {

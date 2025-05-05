@@ -2,8 +2,6 @@ package br.ufal.ic.p2.jackut.models;
 
 import br.ufal.ic.p2.jackut.exceptions.NotFilledAttributeException;
 import br.ufal.ic.p2.jackut.exceptions.NotFoundMessageException;
-import br.ufal.ic.p2.jackut.models.Community;
-import br.ufal.ic.p2.jackut.repositories.UserRepository;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,7 +20,7 @@ public class User implements Serializable {
     private String password;
     private Friends friends;
     private Map<String, String> attributes;
-    private Queue<Message> messages;
+    private Queue<Recado> recados;
     private ArrayList<String> communitiesJoined;
     private Queue<String> communitiesMessages;
     public ArrayList<String> fans = new ArrayList<>();
@@ -37,7 +35,7 @@ public class User implements Serializable {
     public User() {
         this.friends = new Friends();
         this.attributes = new HashMap<>();
-        this.messages = new LinkedList<>();
+        this.recados = new LinkedList<>();
         this.communitiesJoined = new ArrayList<>();
         this.communitiesMessages = new LinkedList<>();
     }
@@ -93,8 +91,8 @@ public class User implements Serializable {
         return attributes;
     }
 
-    public Queue<Message> getMessages() {
-        return messages;
+    public Queue<Recado> getRecados() {
+        return recados;
     }
 
     public void setCommunitiesJoined(ArrayList<String> communitiesJoined) {
@@ -125,8 +123,8 @@ public class User implements Serializable {
     /**
      * Adiciona um recado à fila de mensagens recebidas do usuário.
      */
-    public void incomingMessage(Message message) {
-        messages.add(message);
+    public void incomingMessage(Recado message) {
+        recados.add(message);
     }
 
     /**
@@ -199,6 +197,112 @@ public class User implements Serializable {
         communitiesMessages.add(message);
     }
 
+    /**
+     * Adiciona uma mensagem à fila de mensagens do usuário.
+     *
+     * @param message A mensagem a ser adicionada.
+     */
+    public void addMessage(Recado message) {
+        this.recados.add(message);
+    }
 
+    /**
+     * Obtém a fila de mensagens do usuário.
+     *
+     * @return A fila de mensagens.
+     */
+    public Queue<Recado> getMessages() {
+        return recados;
+    }
 
+    /**
+     * Sets the messages queue for this user.
+     * This method replaces the current messages queue with a new one.
+     * It's particularly useful when filtering messages, such as during user removal.
+     *
+     * @param messages the new messages queue
+     */
+    public void setMessages(Queue<Recado> messages) {
+        this.recados = messages;
+    }
+
+    /**
+     * Adiciona um usuário à lista de ídolos.
+     *
+     * @param idolLogin O login do ídolo a ser adicionado.
+     */
+    public void addIdol(String idolLogin) {
+        if (!idols.contains(idolLogin)) {
+            idols.add(idolLogin);
+        }
+    }
+
+    /**
+     * Adiciona um usuário à lista de fãs.
+     *
+     * @param fanLogin O login do fã a ser adicionado.
+     */
+    public void addFan(String fanLogin) {
+        if (!fans.contains(fanLogin)) {
+            fans.add(fanLogin);
+        }
+    }
+
+    /**
+     * Adiciona um usuário à lista de paqueras.
+     *
+     * @param crushLogin O login da paquera a ser adicionada.
+     */
+    public void addCrush(String crushLogin) {
+        if (!crushes.contains(crushLogin)) {
+            crushes.add(crushLogin);
+        }
+    }
+
+    /**
+     * Adiciona um usuário à lista de inimigos.
+     *
+     * @param enemyLogin O login do inimigo a ser adicionado.
+     */
+    public void addEnemy(String enemyLogin) {
+        if (!enemies.contains(enemyLogin)) {
+            enemies.add(enemyLogin);
+        }
+    }
+
+    /**
+     * Obtém a lista de paqueras do usuário.
+     *
+     * @return A lista de paqueras.
+     */
+    public ArrayList<String> getCrushes() {
+        return crushes;
+    }
+
+    /**
+     * Obtém a lista de inimigos do usuário.
+     *
+     * @return A lista de inimigos.
+     */
+    public ArrayList<String> getEnemies() {
+        return enemies;
+    }
+
+    /**
+     * Obtém a lista de ídolos do usuário.
+     *
+     * @return A lista de ídolos.
+     */
+    public ArrayList<String> getIdols() {
+        return idols;
+    }
+
+    /**
+     * Obtém a lista de fãs do usuário.
+     *
+     * @return A lista de fãs.
+     */
+    public ArrayList<String> getFans() {
+        return fans;
+    }
 }

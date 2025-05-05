@@ -9,7 +9,7 @@ import java.io.Serializable;
  *
  * @author Felipe Lira
  */
-public class Message implements Serializable {
+public class Recado implements Serializable {
     private static final long serialVersionUID = 1L; // Identificador único para a classe
 
     /**
@@ -34,7 +34,7 @@ public class Message implements Serializable {
      * @param mensagem O conteúdo da Mensagem.
      * @param destinatario O login do usuário que recebeu a Mensagem.
      */
-    public Message(String remetente, String mensagem, String destinatario) {
+    public Recado(String remetente, String mensagem, String destinatario) {
         this.remetente = remetente;
         this.mensagem = mensagem;
         this.destinatario = destinatario;

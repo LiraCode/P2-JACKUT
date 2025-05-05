@@ -26,4 +26,3 @@ expectError "Não há recados." lerRecado id=${s2}
 expectError "Usuário não cadastrado." removerUsuario id=${s1}
 
 encerrarSistema
-quit

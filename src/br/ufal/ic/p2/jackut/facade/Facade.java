@@ -1,6 +1,7 @@
 package br.ufal.ic.p2.jackut.facade;
 
 import br.ufal.ic.p2.jackut.exceptions.*;
+import br.ufal.ic.p2.jackut.models.User;
 import br.ufal.ic.p2.jackut.repositories.CommunityRepository;
 import br.ufal.ic.p2.jackut.repositories.UserRepository;
 import br.ufal.ic.p2.jackut.services.*;
@@ -21,242 +22,141 @@ public class Facade {
     private final MessageService messageService;
     private final SystemService systemService;
     private final CommunityService communityService;
+    private final RelationshipService relationshipService;
 
     public Facade() {
         this.userRepository = new UserRepository();
         this.communityRepository = new CommunityRepository();
-        this.communityService = new CommunityService(userRepository,communityRepository);
+        this.communityService = new CommunityService(userRepository, communityRepository);
         this.systemService = new SystemService(userRepository, communityService);
-        this.userService = new UserService(userRepository);
+        this.userService = new UserService(userRepository, communityRepository, systemService);
         this.authService = new AuthService(userRepository);
         this.friendshipService = new FriendshipService(userRepository);
         this.messageService = new MessageService(userRepository);
-
+        this.relationshipService = new RelationshipService(userRepository, authService);
     }
 
     public void zerarSistema() {
-        try {
-            systemService.resetSystem();
-        } catch (Exception e) {
-            System.err.println("Erro ao zerar o sistema: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+        systemService.resetSystem();
+
     }
 
     public void carregarSistema() {
-        try {
-            systemService.loadSystem();
-        } catch (Exception e) {
-            System.err.println("Erro ao carregar dados do arquivo serializado: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+        systemService.loadSystem();
+
     }
 
     public void encerrarSistema() {
-        try {
-            systemService.saveSystem();
-        } catch (Exception e) {
-            System.err.println("Erro ao salvar os dados no arquivo serializado: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+        systemService.saveSystem();
     }
 
     public void criarUsuario(String login, String senha, String nome)
             throws InvalidAuthException, UserAlreadyExistsException {
-        try {
-            userService.createUser(login, senha, nome);
-        } catch (InvalidAuthException | UserAlreadyExistsException e) {
-            System.err.println("Erro ao criar usuário: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao criar usuário: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+
+        userService.createUser(login, senha, nome);
+
     }
 
     public String getAtributoUsuario(String login, String atributo)
-            throws NotFoundUserException, NotFilledAttributeException {
-        try {
-            return userService.getUserAttribute(login, atributo);
-        } catch (NotFoundUserException | NotFilledAttributeException e) {
-            System.err.println("Erro ao obter atributo: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao obter atributo: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+            throws NotFoundUserException, NotFilledAttributeException, InvalidAuthException {
+
+        return userService.getUserAttribute(login, atributo);
+
     }
 
     public String abrirSessao(String login, String senha)
             throws InvalidAuthException {
-        try {
-            return authService.login(login, senha);
-        } catch (InvalidAuthException e) {
-            System.err.println("Erro ao abrir sessão: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao abrir sessão: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+        return authService.login(login, senha);
+
     }
 
     public void editarPerfil(String id, String atributo, String valor)
             throws NotFoundUserException, InvalidAuthException, UserAlreadyExistsException {
-        try {
-            userService.editProfile(id, atributo, valor);
-        } catch (NotFoundUserException | InvalidAuthException | UserAlreadyExistsException e) {
-            System.err.println("Erro ao editar perfil: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao editar perfil: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+
+        userService.editProfile(id, atributo, valor);
+
     }
 
     public boolean ehAmigo(String login, String amigo)
             throws NotFoundUserException {
-        try {
-            return friendshipService.areFriends(login, amigo);
-        } catch (NotFoundUserException e) {
-            System.err.println("Erro ao verificar amizade: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao verificar amizade: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+        return friendshipService.areFriends(login, amigo);
     }
 
     public void adicionarAmigo(String id, String amigo)
             throws NotFoundUserException, InvalidFriendOpException {
-        try {
-            friendshipService.addFriend(id, amigo);
-        } catch (NotFoundUserException | InvalidFriendOpException e) {
-            System.err.println("Erro ao adicionar amigo: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao adicionar amigo: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+
+        friendshipService.addFriend(id, amigo);
+
     }
 
     public String getAmigos(String login)
             throws NotFoundUserException {
-        try {
-            return friendshipService.getFriendsList(login);
-        } catch (NotFoundUserException e) {
-            System.err.println("Erro ao obter amigos: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao obter amigos: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+        return friendshipService.getFriendsList(login);
+
     }
 
     public void enviarRecado(String id, String destinatario, String mensagem)
             throws NotFoundUserException, SelfMessageException {
-        try {
-            messageService.sendMessage(id, destinatario, mensagem);
-        } catch (NotFoundUserException | SelfMessageException e) {
-            System.err.println("Erro ao enviar recado: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao enviar recado: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+
+        messageService.sendMessage(id, destinatario, mensagem);
+
+
     }
 
     public String lerRecado(String id)
             throws NotFoundUserException, NotFoundMessageException {
-        try {
-            return messageService.readMessage(id);
-        } catch (NotFoundUserException | NotFoundMessageException e) {
-            System.err.println("Erro ao ler recado: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao ler recado: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+        return messageService.readMessage(id);
+
     }
 
-    public void criarComunidade(String session, String nome, String descricao) throws InvalidCommunityException {
-        try {
-            communityService.createCommunity(session, nome, descricao);
-        } catch (InvalidCommunityException e) {
-            System.err.println("Erro ao criar comunidade: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao criar comunidade: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+    public void criarComunidade(String session, String nome, String descricao) throws InvalidCommunityException, NotFoundUserException {
+
+        communityService.createCommunity(session, nome, descricao);
+//        }
     }
 
-    public void editarComunidade(String session, String nome, String descricao) throws InvalidCommunityException {
-        try {
-            communityService.editCommunityDescription(session, nome, descricao);
-        } catch (InvalidCommunityException e) {
-            System.err.println("Erro ao editar comunidade: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao editar comunidade: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+    public void editarComunidade(String session, String nome, String descricao) throws InvalidCommunityException, NotFoundUserException {
+
+        communityService.editCommunityDescription(session, nome, descricao);
+
     }
 
-    public void deletarComunidade(String session, String nome) throws InvalidCommunityException {
-        try {
-            communityService.deleteCommunity(session, nome);
-        } catch (InvalidCommunityException e) {
-            System.err.println("Erro ao deletar comunidade: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao deletar comunidade: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+    public void deletarComunidade(String session, String nome) throws InvalidCommunityException, NotFoundUserException {
+
+        communityService.deleteCommunity(session, nome);
+
     }
 
     public void adicionarComunidade(String session, String nome) throws InvalidCommunityException, NotFoundUserException {
-            communityService.joinCommunity(session, nome);
+        communityService.joinCommunity(session, nome);
 
     }
 
-    public void sairComunidade(String session, String nome) throws InvalidCommunityException {
-        try {
-            communityService.leaveCommunity(session, nome);
-        } catch (InvalidCommunityException e) {
-            System.err.println("Erro ao sair comunidade: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro ao sair comunidade: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+    public void sairComunidade(String session, String nome) throws InvalidCommunityException, NotFoundUserException {
+
+        communityService.leaveCommunity(session, nome);
+
     }
 
-    public void listarComunidades(String session) throws InvalidCommunityException, NotFoundUserException {
-        try {
-            System.out.println(session);
-            communityService.listCommunities(session);
-        } catch (NotFoundUserException e) {
-            System.err.println("Erro ao listar comunidades do usuário: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Erro inesperado ao listar comunidades: " + e.getMessage());
-            throw new SystemOperationException(e);
-        }
+    public void listarComunidades(String session) throws  NotFoundUserException {
+
+        communityService.listCommunities(session);
+
     }
 
-    public String getDescricaoComunidade( String nome) throws InvalidCommunityException, NotFoundUserException {
+    public String getDescricaoComunidade(String nome) throws InvalidCommunityException {
         return communityService.getCommunityDescription(nome);
     }
 
-    public String getDonoComunidade( String nome) throws InvalidCommunityException, NotFoundUserException {
+    public String getDonoComunidade(String nome) throws InvalidCommunityException {
         return communityService.getCommunityOwner(nome);
     }
 
-    public String getMembrosComunidade(String nome) throws InvalidCommunityException, NotFoundUserException {
+    public String getMembrosComunidade(String nome) throws InvalidCommunityException {
         return communityService.getCommunityMembers(nome);
     }
 
-    public String getComunidades(String nome) throws InvalidCommunityException, NotFoundUserException {
+    public String getComunidades(String nome) throws  NotFoundUserException {
 
 
         return communityService.listCommunities(nome);
@@ -271,5 +171,126 @@ public class Facade {
             throws NotFoundUserException, NotFoundMessageException {
         return communityService.readMessage(id);
     }
+
+    /**
+     * Adiciona um usuário como ídolo de outro.
+     *
+     * @param id    O ID da sessão do usuário que está adicionando o ídolo.
+     * @param idolo O login do usuário a ser adicionado como ídolo.
+     */
+    public void adicionarIdolo(String id, String idolo) throws NotFoundUserException {
+
+        relationshipService.adicionarIdolo(id, idolo);
     }
+
+    /**
+     * Verifica se um usuário é fã de outro.
+     *
+     * @param login O login do usuário a verificar.
+     * @param idolo O login do possível ídolo.
+     * @return true se o usuário for fã do ídolo, false caso contrário.
+     */
+    public boolean ehFa(String login, String idolo) {
+
+        return relationshipService.ehFa(login, idolo);
+
+    }
+
+    /**
+     * Obtém a lista de fãs de um usuário.
+     *
+     * @param login O login do usuário.
+     * @return Uma string formatada com a lista de fãs.
+     */
+    public String getFas(String login) {
+
+        return relationshipService.getFas(login);
+
+    }
+
+    /**
+     * Adiciona um usuário como paquera de outro.
+     *
+     * @param id      O ID da sessão do usuário que está adicionando a paquera.
+     * @param paquera O login do usuário a ser adicionado como paquera.
+     */
+    public void adicionarPaquera(String id, String paquera) throws NotFoundUserException {
+
+        relationshipService.adicionarPaquera(id, paquera);
+
+    }
+
+    /**
+     * Verifica se um usuário é paquera de outro.
+     *
+     * @param id      O ID da sessão do usuário.
+     * @param paquera O login da possível paquera.
+     * @return true se o usuário for paquera, false caso contrário.
+     */
+    public boolean ehPaquera(String id, String paquera) throws NotFoundUserException {
+
+        return relationshipService.ehPaquera(id, paquera);
+
+    }
+
+    /**
+     * Obtém a lista de paqueras de um usuário.
+     *
+     * @param id O ID da sessão do usuário.
+     * @return Uma string formatada com a lista de paqueras.
+     */
+    public String getPaqueras(String id) throws NotFoundUserException {
+
+        return relationshipService.getPaqueras(id);
+
+    }
+
+    /**
+     * Adiciona um usuário como inimigo de outro.
+     *
+     * @param id      O ID da sessão do usuário que está adicionando o inimigo.
+     * @param inimigo O login do usuário a ser adicionado como inimigo.
+     */
+    public void adicionarInimigo(String id, String inimigo) throws NotFoundUserException {
+        relationshipService.adicionarInimigo(id, inimigo);
+
+    }
+
+    /**
+     * Verifica se um usuário é inimigo de outro.
+     *
+     * @param id      O ID da sessão do usuário.
+     * @param inimigo O login do possível inimigo.
+     * @return true se o usuário for inimigo, false caso contrário.
+     */
+    public boolean ehInimigo(String id, String inimigo) throws NotFoundUserException {
+        return relationshipService.ehInimigo(id, inimigo);
+
+    }
+
+    /**
+     * Obtém a lista de inimigos de um usuário.
+     *
+     * @param id O ID da sessão do usuário.
+     * @return Uma string formatada com a lista de inimigos.
+     */
+    public String getInimigos(String id) throws NotFoundUserException {
+        return relationshipService.getInimigos(id);
+
+    }
+
+    /**
+     * Removes the currently logged-in user from the system.
+     *
+     * @param sessionId The session ID of the user to be removed
+     * @throws NotFoundUserException if the user doesn't exist
+     */
+    public void removerUsuario(String sessionId) throws NotFoundUserException {
+
+        User user = userRepository.getUserBySession(sessionId);
+        String login = user.getLogin();
+        userService.removeUser(login);
+
+    }
+}
 
