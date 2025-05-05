@@ -1,14 +1,11 @@
 package br.ufal.ic.p2.jackut.facade;
 
 import br.ufal.ic.p2.jackut.exceptions.*;
-import br.ufal.ic.p2.jackut.models.Message;
-import br.ufal.ic.p2.jackut.models.User;
+import br.ufal.ic.p2.jackut.repositories.CommunityRepository;
 import br.ufal.ic.p2.jackut.repositories.UserRepository;
 import br.ufal.ic.p2.jackut.services.*;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Facade que expõe as funcionalidades do sistema para os clientes.
@@ -17,19 +14,24 @@ import java.util.Map;
 public class Facade {
 
     private final UserRepository userRepository;
+    private final CommunityRepository communityRepository;
     private final UserService userService;
     private final AuthService authService;
     private final FriendshipService friendshipService;
     private final MessageService messageService;
     private final SystemService systemService;
+    private final CommunityService communityService;
 
     public Facade() {
         this.userRepository = new UserRepository();
-        this.systemService = new SystemService(userRepository);
+        this.communityRepository = new CommunityRepository();
+        this.communityService = new CommunityService(userRepository,communityRepository);
+        this.systemService = new SystemService(userRepository, communityService);
         this.userService = new UserService(userRepository);
         this.authService = new AuthService(userRepository);
         this.friendshipService = new FriendshipService(userRepository);
         this.messageService = new MessageService(userRepository);
+
     }
 
     public void zerarSistema() {
@@ -175,4 +177,91 @@ public class Facade {
             throw new SystemOperationException(e);
         }
     }
-}
+
+    public void criarComunidade(String session, String nome, String descricao) throws InvalidCommunityException {
+        try {
+            communityService.createCommunity(session, nome, descricao);
+        } catch (InvalidCommunityException e) {
+            System.err.println("Erro ao criar comunidade: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Erro ao criar comunidade: " + e.getMessage());
+            throw new SystemOperationException(e);
+        }
+    }
+
+    public void editarComunidade(String session, String nome, String descricao) throws InvalidCommunityException {
+        try {
+            communityService.editCommunityDescription(session, nome, descricao);
+        } catch (InvalidCommunityException e) {
+            System.err.println("Erro ao editar comunidade: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Erro ao editar comunidade: " + e.getMessage());
+            throw new SystemOperationException(e);
+        }
+    }
+
+    public void deletarComunidade(String session, String nome) throws InvalidCommunityException {
+        try {
+            communityService.deleteCommunity(session, nome);
+        } catch (InvalidCommunityException e) {
+            System.err.println("Erro ao deletar comunidade: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar comunidade: " + e.getMessage());
+            throw new SystemOperationException(e);
+        }
+    }
+
+    public void adicionarComunidade(String session, String nome) throws InvalidCommunityException, NotFoundUserException {
+            communityService.joinCommunity(session, nome);
+
+    }
+
+    public void sairComunidade(String session, String nome) throws InvalidCommunityException {
+        try {
+            communityService.leaveCommunity(session, nome);
+        } catch (InvalidCommunityException e) {
+            System.err.println("Erro ao sair comunidade: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Erro ao sair comunidade: " + e.getMessage());
+            throw new SystemOperationException(e);
+        }
+    }
+
+    public void listarComunidades(String session) throws InvalidCommunityException, NotFoundUserException {
+        try {
+            System.out.println(session);
+            communityService.listCommunities(session);
+        } catch (NotFoundUserException e) {
+            System.err.println("Erro ao listar comunidades do usuário: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao listar comunidades: " + e.getMessage());
+            throw new SystemOperationException(e);
+        }
+    }
+
+    public String getDescricaoComunidade( String nome) throws InvalidCommunityException, NotFoundUserException {
+        return communityService.getCommunityDescription(nome);
+    }
+
+    public String getDonoComunidade( String nome) throws InvalidCommunityException, NotFoundUserException {
+        return communityService.getCommunityOwner(nome);
+    }
+
+    public String getMembrosComunidade(String nome) throws InvalidCommunityException, NotFoundUserException {
+        return communityService.getCommunityMembers(nome);
+    }
+
+    public String getComunidades(String nome) throws InvalidCommunityException, NotFoundUserException {
+
+
+        return communityService.listCommunities(nome);
+    }
+
+
+    }
+

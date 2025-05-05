@@ -20,6 +20,7 @@ public class User implements Serializable {
     private Friends friends;
     private Map<String, String> attributes;
     private Queue<Message> messages;
+    private ArrayList<String> communitiesJoined;
 
     /**
      * Construtor padrão necessário para serialização.
@@ -28,6 +29,7 @@ public class User implements Serializable {
         this.friends = new Friends();
         this.attributes = new HashMap<>();
         this.messages = new LinkedList<>();
+        this.communitiesJoined = new ArrayList<>();
     }
 
     /**
@@ -83,6 +85,10 @@ public class User implements Serializable {
 
     public Queue<Message> getMessages() {
         return messages;
+    }
+
+    public void setCommunitiesJoined(ArrayList<String> communitiesJoined) {
+        this.communitiesJoined = communitiesJoined;
     }
 
     // Métodos funcionais
@@ -154,5 +160,19 @@ public class User implements Serializable {
      */
     public void addFriendSolicitation(String login) {
         friends.addFriendSolicitation(login);
+    }
+
+    public void removeFriendSolicitation(String login) {}
+
+    public void removeFriend(String friendLogin) {}
+    public void  addCommunity(String name) {
+        communitiesJoined.add(name);
+    }
+    public void removeCommunity(String name) {
+        communitiesJoined.remove(name);
+    }
+
+    public ArrayList<String> getCommunitiesJoined() {
+        return communitiesJoined;
     }
 }

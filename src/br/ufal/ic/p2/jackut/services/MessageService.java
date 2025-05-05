@@ -1,6 +1,5 @@
 package br.ufal.ic.p2.jackut.services;
 
-import br.ufal.ic.p2.jackut.exceptions.InvalidAuthException;
 import br.ufal.ic.p2.jackut.exceptions.NotFoundMessageException;
 import br.ufal.ic.p2.jackut.exceptions.NotFoundUserException;
 import br.ufal.ic.p2.jackut.exceptions.SelfMessageException;
@@ -30,7 +29,7 @@ public class MessageService {
      * @param id o ID da sessão do remetente
      * @param destinatario o login do destinatário
      * @param mensagem o conteúdo da mensagem
-     * @throws InvalidAuthException se o usuário tentar enviar mensagem para si mesmo
+     * @throws SelfMessageException se o usuário tentar enviar mensagem para si mesmo
      * @throws NotFoundUserException se o remetente ou destinatário não forem encontrados
      */
     public void sendMessage(String id, String destinatario, String mensagem) throws SelfMessageException, NotFoundUserException {

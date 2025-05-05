@@ -3,10 +3,9 @@ package br.ufal.ic.p2.jackut.repositories;
 import br.ufal.ic.p2.jackut.models.User;
 import br.ufal.ic.p2.jackut.exceptions.NotFoundUserException;
 
+import javax.security.auth.login.LoginException;
 import java.io.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Repositório em memória + persistência via serialização de usuários e sessões.
@@ -70,6 +69,32 @@ public class UserRepository {
     /** Recupera usuário a partir de um sessionId. */
     public User getUserBySession(String sessionId) {
         return sessions.get(sessionId);
+    }
+
+    public void JoinCommunity(String session, String name) throws NotFoundUserException {
+        User user = getUserBySession(session);
+        if (user == null) {
+            throw new NotFoundUserException();
+        }
+        user.addCommunity(name);
+
+    }
+
+    public void LeaveCommunity(String session, String name) throws NotFoundUserException {
+        User user = getUserBySession(session);
+        if (user == null) {
+            throw new NotFoundUserException();
+        }
+        user.removeCommunity(name);
+    }
+
+    public ArrayList<String> getCommunities(String login) throws NotFoundUserException {
+        User user = getUserByLogin(login);
+        if (user == null) {
+            throw new NotFoundUserException();
+        }
+
+        return user.getCommunitiesJoined();
     }
 
     /** Limpa tod0 o repositório (usuários + sessões). */
