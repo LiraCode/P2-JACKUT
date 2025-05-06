@@ -1,6 +1,8 @@
 # Jackut - Social Network System
 
-Jackut is a simple social network application, designed to manage users, friends, and messages, with robust functionality and data persistence using serialization in Java.
+**Jackut** is a simple social network application, designed to manage users, friends, and messages, with robust functionality and data persistence using serialization in **Java**.
+
+Evaluation project for the **P2 (Object-Oriented Programming)** course at the Federal University of Alagoas, under the guidance of Professor ***Mario Hozano***
 
 ---
 
